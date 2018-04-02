@@ -29,7 +29,4 @@ public class UrlServiceImpl implements UrlService {
         return urlDao.addNewShortUrl(urlRegular);
     }
 
-//    public void test() {
-//        urlDao.temp_add2items();
-//    }
 }

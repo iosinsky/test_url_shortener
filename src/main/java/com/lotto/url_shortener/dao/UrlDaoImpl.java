@@ -4,6 +4,7 @@ import com.lotto.url_shortener.utils.UrlShortenerBase62;
 import com.lotto.url_shortener.model.Url;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,6 @@ public class UrlDaoImpl implements UrlDao {
     private static final Logger logger = LoggerFactory.getLogger(UrlDaoImpl.class);
 
     @Autowired
-    // private SessionFactory sessionFactory;
     private EntityManagerFactory entityManagerFactory;
 
     @Override
@@ -38,32 +38,26 @@ public class UrlDaoImpl implements UrlDao {
     @Override
     public String getUrlRegularById(Long id) {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();// TODO: need to transfer session management to separate bean
-
         Url url = (Url) session.get(Url.class, id);
         if (Objects.isNull(url)) {
             logger.error(String.format("Url object with id = %s is not found in the persistency storage.", id.toString()));
             return null;
         }
-        return url.getShortUrlSuffix();
+        return url.getRegularUrl();
     }
-
-//    public void temp_add2items() {
-//        Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-//        Url newu1 = new Url("http:\\google.com", "12345");
-//        Url newu2 = new Url("http:\\google.ru", "5rfvfg");
-//        session.save(newu1);
-//        session.save(newu2);
-//    }
 
     // since this is basic it is purely functional. There is no transaction management etc.
     @Override
     public String addNewShortUrl(String regularUrl) {
         Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+        Transaction tx = session.beginTransaction();
         Url newEntry = new Url(regularUrl);
         session.save(newEntry);//save to get newly generated id
         newEntry.setShortUrlSuffix(UrlShortenerBase62.fromBase10(newEntry.getId())); // here the magic happens
        //session.update(newEntry);
         session.saveOrUpdate(newEntry);
+        tx.commit();
+        session.close();
         return newEntry.getShortUrlSuffix();
     }
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by iosinsky on 01.04.2018.
  */
 @Entity
-@Table//(name="url")
+@Table
 public class Url implements Serializable {
 
     @Id
@@ -17,11 +17,11 @@ public class Url implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column//(nullable = false)
+    @Column
     @JsonProperty
     private String shortUrlSuffix;
 
-    @Column//(nullable = false)
+    @Column
     @JsonProperty
     private String regularUrl;
 

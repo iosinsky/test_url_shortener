@@ -16,10 +16,7 @@ public class UrlShortConverterController {
     @Autowired
     UrlService urlService;
 
-    //@RequestMapping(value = "/shorturl/convert", method = RequestMethod.POST)
-    //@RequestMapping("/shorturl/convert/{url}")
     @RequestMapping("/shorturl/convert")
-    //public ResponseEntity<String> createShortUrl(@PathVariable String url) {
         public ResponseEntity<String> createShortUrl(@RequestParam("url") String url) {
         if (!validateUrl(url)) {
             return new ResponseEntity("invalid url", HttpStatus.PRECONDITION_FAILED);
@@ -29,8 +26,6 @@ public class UrlShortConverterController {
     }
 
     public boolean validateUrl(String url) {
-//        String[] schemes = {"http", "https"};
-//        UrlValidator urlValidator = new UrlValidator(schemes);
         UrlValidator urlValidator = new UrlValidator();
         if (urlValidator.isValid(url)) {
             return true;
