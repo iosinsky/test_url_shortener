@@ -63,6 +63,7 @@ public class UrlDaoImpl implements UrlDao {
         session.save(newEntry);//save to get newly generated id
         newEntry.setShortUrlSuffix(UrlShortenerBase62.fromBase10(newEntry.getId())); // here the magic happens
         session.update(newEntry);
+        session.save(newEntry);
         return newEntry.getShortUrlSuffix();
     }
 

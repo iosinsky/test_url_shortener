@@ -36,7 +36,7 @@ public class Url implements Serializable {
 
     public Url(String regularUrl) {
         this.regularUrl = regularUrl;
-        this.shortUrlSuffix = null;
+        this.shortUrlSuffix = "";
     }
 
     public Long getId() {
